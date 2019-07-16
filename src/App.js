@@ -1,24 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import ItemListComponent from './ItemListComponent';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="jumbotron jumbotron-fluid" style = {{marginTop: "100px"}}>
+        <div className="container">
+          <h1 className="display-4">Funny Screen</h1>
+          <p className="lead">A list of pages to be looped.</p>
+          <ItemListComponent></ItemListComponent>
+        </div>
+      </div>
     </div>
   );
 }
