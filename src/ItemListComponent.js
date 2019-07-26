@@ -1,4 +1,6 @@
 import React from 'react';
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
 
 class ItemListComponent extends React.Component {
 
@@ -6,13 +8,20 @@ class ItemListComponent extends React.Component {
         super(props);
 
         this.state = {
-            optionList: ["https://www.amazon.com", "https://www.netflix.com", "https://www.ted.com/#/", "https://www.youtube.com/"],
+            // optionList: ["https://www.amazon.com", "https://www.netflix.com", "https://www.ted.com/#/", "https://www.youtube.com/"],
+            optionList: ["//placekitten.com/1500/500",
+                "//placekitten.com/4000/3000",
+                "//placekitten.com/800/1200",
+                "//placekitten.com/1500/1500"],
             selectOption: undefined,
             newUrl: "",
             newInterval: undefined,
             currentInterval: undefined,
             myWindow: undefined,
             loop: undefined,
+            photoIndex: -1,
+            isOpen: false,
+            isClosed: false,
         };
 
     }
@@ -142,6 +151,60 @@ class ItemListComponent extends React.Component {
 
     }
 
+    setDisplay = () => {
+        this.setState({ isClosed: false })
+        let loop;
+        if (loop != null) {
+            loop = null;
+        }
+        loop = setInterval(() => {
+
+            if (this.state.isClosed) {
+                clearInterval();
+            }
+            if (this.state.isOpen && !this.state.isClosed) {
+                this.setState({ isOpen: false })
+            }
+            if (!this.state.isOpen && !this.state.isClosed) {
+                this.setState({ isOpen: true })
+            }
+            this.setState({ photoIndex: this.state.photoIndex + 1 })
+            if (this.state.photoIndex > this.state.optionList.length - 1) {
+                this.setState({ photoIndex: 0 })
+            }
+        }, this.state.currentInterval * 1000);
+        if (this.state.isClosed) {
+            clearInterval();
+        }
+
+    }
+
+    // navigateVlightbox = () => {
+    //     const photoIndex = this.state.photoIndex;
+    //     const isOpen = this.state.isOpen;
+
+    //     const displayWebsite = {isOpen && (
+    //         <Lightbox
+    //           mainSrc={this.state.optionList[photoIndex]}
+    //           nextSrc={this.state.optionList[(photoIndex + 1) % this.state.optionList.length]}
+    //           prevSrc={this.state.optionList[(photoIndex + this.state.optionList.length - 1) % this.state.optionList.length]}
+
+    //           onCloseRequest={() => this.setState({ isOpen: false })}
+    //           onMovePrevRequest={() =>
+    //             this.setState({
+    //               photoIndex: (photoIndex + this.state.optionList.length - 1) % this.state.optionList.length
+    //             })
+    //           }
+    //           onMoveNextRequest={() =>
+    //             this.setState({
+    //               photoIndex: (photoIndex + 1) % this.state.optionList.length
+    //             })
+    //           }
+    //         />
+    //       )}
+
+    // }
+
 
 
 
@@ -215,7 +278,33 @@ class ItemListComponent extends React.Component {
                     </div>
                 </div>
                 <br></br>
-                <button className="btn btn-dark btn-lg btn-block" onClick={this.navigate}>Launch</button>
+                {/* <button className="btn btn-dark btn-lg btn-block" onClick={()=>this.setState({isOpen:true,isClosed:false})} >Launch</button> */}
+                <button className="btn btn-dark btn-lg btn-block" onClick={this.setDisplay} >Launch</button>
+
+                {this.state.isOpen && (
+                    <Lightbox
+                        mainSrc={this.state.optionList[this.state.photoIndex]}
+                        nextSrc={this.state.optionList[(this.state.photoIndex + 1) % this.state.optionList.length]}
+                        prevSrc={this.state.optionList[(this.state.photoIndex + this.state.optionList.length - 1) % this.state.optionList.length]}
+
+                        onCloseRequest={() => {
+                            this.setState({
+                                isOpen: false,
+                                isClosed: true
+                            });
+                        }}
+                        onMovePrevRequest={() =>
+                            this.setState({
+                                photoIndex: (this.state.photoIndex + this.state.optionList.length - 1) % this.state.optionList.length
+                            })
+                        }
+                        onMoveNextRequest={() =>
+                            this.setState({
+                                photoIndex: (this.state.photoIndex + 1) % this.state.optionList.length
+                            })
+                        }
+                    />
+                )}
             </div>
         );
     }
